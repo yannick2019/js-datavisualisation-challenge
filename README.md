@@ -17,7 +17,7 @@ Ability to solve a problem inspired from real-life situations using our javascri
 
 ## Technologies used:
 - JavaScript
-- Vite
+- Vite js
 - Chart.js library
  
 ## Installation

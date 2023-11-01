@@ -21,8 +21,8 @@ Ability to solve a problem inspired from real-life situations using our javascri
 - Chart.js library
  
 ## Installation
-`git clone project`
-`cd js-datavisualisation-challenge`
-`npm install or pnpm install to install dependencies` 
+- `git clone project`
+- `cd js-datavisualisation-challenge`
+- `npm install or pnpm install to install dependencies` 
 
   

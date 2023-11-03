@@ -135,10 +135,95 @@ export function chartForTable2() {
 /**
  * Retrieve the data via Ajax, and insert graph that refreshes every second, just below the main title (h1)
  */
+/*
+export function chartWithAjaxLive() {
+    const ctx = document.getElementById("chartAjax").getContext('2d');
+    let chart;
+    let dataPoints = [];
+
+    function fetchDataAndRenderChart() {
+        const url = "https://canvasjs.com/services/data/datapoints.php?xstart=1&ystart=10&length=10&type=json";
+
+        const req = new XMLHttpRequest();
+        req.open("GET", url, true);
+
+        req.onreadystatechange = function () {
+            if (req.readyState === 4 && req.status === 200) {
+                const data = JSON.parse(req.responseText);
+                console.log(data);
+                dataPoints = data.map(point => ({ x: point[0], y: parseInt(point[1])}));
+
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dataPoints.map(datapoint => datapoint.x),
+                        datasets: [{
+                            label: 'Live Chart with dataPoints from External JSON',
+                            data: dataPoints.map(datapoint => datapoint.y),
+                            backgroundColor: '#ecf0f1',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                            }
+                        }
+                    }
+                });
+            }
+        };
+
+        req.send();
+    }
+
+    fetchDataAndRenderChart();
+
+    function updateChart() {
+        const lastDataPoint = dataPoints[dataPoints.length - 1];
+        if (lastDataPoint) {
+            const url = `https://canvasjs.com/services/data/datapoints.php?xstart=${lastDataPoint.x + 1}&ystart=${lastDataPoint.y}&length=1&type=json`;
+
+            const req = new XMLHttpRequest();
+            req.open("GET", url, true);
+
+            req.onreadystatechange = function () {
+                if (req.readyState === 4 && req.status === 200) {
+                    const data = JSON.parse(req.responseText);
+                    if (data.length > 0) {
+                        const newDataPoint = { x: parseInt(data[0][0]), y: parseInt(data[0][1]) };
+                        dataPoints.push(newDataPoint);
+
+                        chart.data.labels.push(newDataPoint.x);
+                        chart.data.datasets[0].data.push(newDataPoint.y);
+
+                        // Limit the number of data points to keep the chart updated
+                        if (dataPoints.length > 10) {
+                            dataPoints.shift();
+                            chart.data.labels.shift();
+                            chart.data.datasets[0].data.shift();
+                        }
+
+                        chart.update();
+                    }
+                }
+            };
+            req.send();
+        }
+        setTimeout(updateChart, 1000);
+    }
+
+    updateChart();
+
+}
+
+*/
+
 export function chartWithAjaxLive() {
     let chart;
     let dataPoints = [];
-    let currentX = 10; // Initialize the current x-value
     
     function fetchDataAndRenderChart() {
         const url = "https://canvasjs.com/services/data/datapoints.php?xstart=1&ystart=10&length=10&type=json";
@@ -149,7 +234,7 @@ export function chartWithAjaxLive() {
         req.onreadystatechange = function () {
             if (req.readyState === 4 && req.status === 200) {
                 const data = JSON.parse(req.responseText);
-                dataPoints = data.map(point => ({ x: parseInt(point[0]), y: parseInt(point[1]) }));
+                dataPoints = data.map(point => ({ x: point[0], y: parseInt(point[1]) }));
                 renderChart(dataPoints);
             }
         };
@@ -183,7 +268,7 @@ export function chartWithAjaxLive() {
     }
     
     function updateChart() {
-        const url = "https://canvasjs.com/services/data/datapoints.php?xstart=" + (currentX + 1) + "&ystart=" + dataPoints[dataPoints.length - 1].y + "&length=1&type=json";
+        const url = "https://canvasjs.com/services/data/datapoints.php?xstart=" + (dataPoints.length + 1) + "&ystart=" + dataPoints[dataPoints.length - 1].y + "&length=1&type=json";
     
         const req = new XMLHttpRequest();
         req.open("GET", url, true);
@@ -191,23 +276,15 @@ export function chartWithAjaxLive() {
         req.onreadystatechange = function () {
             if (req.readyState === 4 && req.status === 200) {
                 const data = JSON.parse(req.responseText);
-                const newPoint = {
+                dataPoints.push({
                     x: parseInt(data[0][0]),
                     y: parseInt(data[0][1])
-                };
-    
-                currentX++;
-    
-                dataPoints.push(newPoint);
-    
-                // Remove the oldest data point if the array length exceeds 10
-                if (dataPoints.length > 10) {
-                    dataPoints.shift();
-                }
-    
-                chart.data.labels = dataPoints.map(datapoint => datapoint.x);
-                chart.data.datasets[0].data = dataPoints.map(datapoint => datapoint.y);
+                });
+                
+                chart.data.labels.push(dataPoints[dataPoints.length - 1].x);
+                chart.data.datasets[0].data.push(dataPoints[dataPoints.length - 1].y);      
                 chart.update();
+                
             }
         };
     
@@ -217,7 +294,7 @@ export function chartWithAjaxLive() {
     fetchDataAndRenderChart();
     
     setInterval(updateChart, 1000);
-     
+    
 }
 
 

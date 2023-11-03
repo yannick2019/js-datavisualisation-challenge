@@ -117,8 +117,6 @@ export function chartForTable2() {
             datasets: tableData.years.map((year, index) => ({
                 label: year,
                 data: tableData.cells.map(row => row[index]),
-                backgroundColor: '#3498db',
-                borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
             }))
         },

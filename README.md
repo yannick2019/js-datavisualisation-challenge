@@ -17,12 +17,11 @@ Ability to solve a problem inspired from real-life situations using our javascri
 
 ## Technologies used:
 - JavaScript
-- Vite js
+- HTML/CSS
 - Chart.js library
+
+## See it live
+Click [here]()
  
-## Installation
-- `git clone project`
-- `cd js-datavisualisation-challenge`
-- `npm install or pnpm install to install dependencies` 
 
   
